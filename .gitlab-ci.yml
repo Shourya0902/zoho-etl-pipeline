@@ -1,0 +1,5 @@
+run_daily_job:
+  image: python:3.11
+  script:
+    - pip install -r requirements.txt
+    - python my_script.py

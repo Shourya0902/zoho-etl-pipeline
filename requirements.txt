@@ -1,0 +1,5 @@
+gspread==6.2.1
+gspread_dataframe==4.0.0
+pandas==3.0.0
+pytz==2024.1
+Requests==2.32.5
