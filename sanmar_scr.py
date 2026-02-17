@@ -1,10 +1,15 @@
+
+
 import pandas as pd
 import requests
-import gspread
 from gspread_dataframe import set_with_dataframe
 from urllib.parse import quote
 from datetime import datetime, timedelta
 import pytz
+import gspread
+
+client_id = '1000.500COYWHDJTT61DFM00ZZB9XHCQT2M'
+client_secret = 'a60b2ee703b497635327e97999cd563f2c2d436a0e'
 
 # Current time and 24 hours ago
 today_date = datetime.now().strftime('%Y-%m-%d')
@@ -12,6 +17,11 @@ today_date = datetime.now().strftime('%Y-%m-%d')
 # Manually add the Zoho-required timestamps
 TIME_IN = f"{today_date}T00:00:00+05:30"
 TIME_OUT = f"{today_date}T23:59:59+05:30"
+
+# # Manually add the Zoho-required timestamps
+# TIME_IN = f"2025-11-01T00:00:00+05:30"
+# TIME_OUT = f"2026-02-17T23:59:59+05:30"
+
 
 criteria = "(Created_Time:between:" + TIME_IN + "," + TIME_OUT + ")"
 params = {"criteria": criteria}
@@ -110,22 +120,24 @@ df_deals_zoho = pd.json_normalize(raw_records)
 
 #SETUP GOOGLE SHEETS
 
-# # 1. Authenticate using User Credentials (Client ID & Secret)
-# gc = gspread.oauth(
-#     credentials_filename='credentials.json',
-#     authorized_user_filename='authorized_user.json'  # Token is saved here automatically
-# )
+# 1. Authenticate using User Credentials (Client ID & Secret)
+gc = gspread.oauth(
+    credentials_filename='credentials.json',
+    authorized_user_filename='authorized_user.json'  # Token is saved here automatically
+)
 
+
+# gc = gspread.service_account(filename="authorized_user.json")
 
 sheet_url = "https://docs.google.com/spreadsheets/d/11_7I0Juswl_XWysMBL5CW2VXZ235AOxMGm-kEVtQPI4/edit?gid=0#gid=0"
 
-file_name = gc.open_by_url(sheet_url)
+sh = gc.open_by_url(sheet_url)
 
 worksheet_leads = sh.worksheet("Leads")
 worksheet_deals = sh.worksheet("Deals")
 
-# data_leads = worksheet_leads.get_all_records()
-# data_deals = worksheet_deals.get_all_records()
+data_leads = worksheet_leads.get_all_records()
+data_deals = worksheet_deals.get_all_records()
 
 # set_with_dataframe(worksheet_leads, df_leads_zoho, row=1, col=1, include_index=False, include_column_header=True, resize=True)
 # set_with_dataframe(worksheet_deals, df_deals_zoho, row=1, col=1, include_index=False, include_column_header=True, resize=True)
@@ -140,16 +152,26 @@ worksheet_deals.append_rows(deals_data_to_append, value_input_option='USER_ENTER
 
 #####################################################
 
+worksheet_leads = sh.worksheet("Leads")
+worksheet_deals = sh.worksheet("Deals")
+
+
 #Filter data on the sheets out of duplicates
 data_leads = pd.DataFrame(worksheet_leads.get_all_records())
 data_deals = pd.DataFrame(worksheet_deals.get_all_records())
 
 # 1. Ensure the date column is in datetime format
 data_leads['Created_Time'] = pd.to_datetime(data_leads['Created_Time'])
+data_deals['Created_Time'] = pd.to_datetime(data_deals['Created_Time'])
 
 # 2. Sort by the ID and Date (ascending)
 # This puts the newest record at the bottom for each ID
 data_leads = data_leads.sort_values(['id', 'Created_Time'])
+data_deals = data_deals.sort_values(['id', 'Created_Time'])
 
 # 3. Drop duplicates, keeping only the last (newest) occurrence
 data_leads = data_leads.drop_duplicates(subset='id', keep='last')
+data_deals = data_deals.drop_duplicates(subset='id', keep='last')
+
+set_with_dataframe(worksheet_leads, data_leads, row=1, col=1, include_index=False, include_column_header=True, resize=True)
+set_with_dataframe(worksheet_deals, data_deals, row=1, col=1, include_index=False, include_column_header=True, resize=True)
