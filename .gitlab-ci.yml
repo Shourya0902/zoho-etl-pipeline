@@ -1,12 +1,11 @@
 stages:
   - execute
 
-# This job runs your script
 run_daily_task:
   stage: execute
-  image: python:3.9-slim  # Lightweight image to save minutes
+  image: python:3.9-slim 
   script:
-    - pip install -r requirements.txt  # Install dependencies
-    - python main.py  # Your script filename
+    - pip install -r requirements.txt  
+    - python main.py  
   only:
-    - schedules  # CRITICAL: Prevents it from running on every code push
+    - schedules  
