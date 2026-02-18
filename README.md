@@ -49,7 +49,7 @@ The Looker dashboard provides visibility into key sales and pipeline metrics, in
 
 The dashboard is designed for non-technical users and focuses on decision-ready metrics.
 
-![Uploading Screenshot 2026-02-19 at 01.17.37.png…]()
+![alt text](Gemini_Generated_Image_djredmdjredmdjre.png)
 
 
 ---
@@ -61,8 +61,6 @@ The dashboard enables users to:
 - Compare deal volume and value across sales owners
 - Identify trends and potential bottlenecks in the funnel
 
-![Pipeline by Stage](pipeline_by_stage.png)
-
 ---
 
 ## Automation
@@ -71,8 +69,6 @@ The pipeline is executed daily using a scheduled GitLab CI/CD job:
 - Data extraction, transformation, and loading run automatically
 - Google Sheets is updated with the latest data
 - Looker dashboards reflect updated data without manual refresh
-
-![GitLab CI/CD Pipeline](ci_pipeline.png)
 
 ---
 
@@ -121,5 +117,3 @@ This project demonstrates the ability to:
 - Deliver business-ready analytics and dashboards
 - Own the full data lifecycle from source to reporting
 
-
-## Repository Structure
