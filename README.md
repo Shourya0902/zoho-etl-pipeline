@@ -26,7 +26,7 @@ The data flows through the following steps:
 4. Looker connects to Google Sheets for reporting  
 5. GitLab CI/CD schedules and executes the pipeline daily  
 
-![Architecture Diagram](architecture.png)
+![alt text](<Screenshot 2026-02-19 at 01.17.37.png>)
 
 ---
 
