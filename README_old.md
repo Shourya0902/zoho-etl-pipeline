@@ -94,6 +94,20 @@ The pipeline is executed daily using a scheduled GitLab CI/CD job:
 
 ---
 
+## Running Locally
+
+```bash
+git clone https://github.com/Shourya0902/zoho-etl-pipeline.git
+cd zoho-etl-pipeline
+pip install -r requirements.txt
+
+# Copy and fill in your credentials
+cp .env.example .env
+
+python sanmar_scr.py
+```
+
+---
 ## Example Use Cases
 - Sales managers tracking pipeline value and deal progress  
 - Leadership monitoring individual and team performance  
